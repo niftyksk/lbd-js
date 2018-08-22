@@ -1,0 +1,21 @@
+//Adding for personal reference.
+//Original source from https://medium.com/zenuml/zenuml-sequence-diagram-examples-4e54e3bdca3b
+//Additional Reference: https://www.uml-diagrams.org/sequence-diagrams.html
+
+@Starter(User)
+PermissionForm = :WebBrowser.getFBResource() {
+  HttpRedirect = :Application.requestFBAccess()
+  PermissionForm = :FacebookAuthServer.authorize()
+}
+:WebBrowser.userPermission() {
+  HttpRedirect = :FacebookAuthServer.processPermission()
+  if (permissionGranted) {
+    Resource = :Application.fbAuthenticationCode() {
+      AccessToken = :FacebookAuthServer.fbAuthenticationCode()
+      Resource = :FacebookContentServer.getProtectedResource()
+    }
+  } else if (noPermission) {
+    ResournceNA = :Application.noAuthentication()    
+  }
+}
+@Group(test)
